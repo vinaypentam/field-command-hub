@@ -84,29 +84,22 @@ export default function Dashboard() {
         {/* Map Panel - Spans 2 columns */}
         <MiniMap className="col-span-2 row-span-2" />
 
-        {/* Fuel/Energy */}
-        <MetricCard title="Fuel Level" value="" className="flex flex-col items-center justify-center">
-          <CircularGauge
-            value={85}
-            max={100}
-            label="Diesel Tank"
-            unit="%"
-            variant="success"
-            size="md"
-          />
-        </MetricCard>
+        {/* Area Covered Today - moved up */}
+        <MetricCard
+          title="Area Covered"
+          value="12.4"
+          unit="hectares"
+          variant="success"
+          size="lg"
+        />
 
-        {/* Temperature */}
-        <MetricCard title="Engine Temp" value="" className="flex flex-col items-center justify-center">
-          <CircularGauge
-            value={78}
-            max={120}
-            label="°C"
-            unit="°C"
-            variant="warning"
-            size="md"
-          />
-        </MetricCard>
+        {/* Distance Traveled - moved up */}
+        <MetricCard
+          title="Distance"
+          value="28.7"
+          unit="km"
+          size="lg"
+        />
 
         {/* Alerts Panel */}
         <div className="dashboard-panel col-span-2 lg:col-span-2">
@@ -137,24 +130,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Area Covered Today */}
-        <MetricCard
-          title="Area Covered"
-          value="12.4"
-          unit="hectares"
-          variant="success"
-          size="lg"
-          className="col-span-1"
-        />
-
-        {/* Distance Traveled */}
-        <MetricCard
-          title="Distance"
-          value="28.7"
-          unit="km"
-          size="lg"
-          className="col-span-1"
-        />
       </div>
     </div>
   );

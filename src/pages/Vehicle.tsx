@@ -4,7 +4,7 @@ import { BatteryGauge } from "@/components/dashboard/BatteryGauge";
 import { SensorGrid } from "@/components/dashboard/SensorGrid";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { cn } from "@/lib/utils";
-import { Gauge, Power, Thermometer, Zap } from "lucide-react";
+import { Gauge, Power, Zap } from "lucide-react";
 
 const sensors = [
   { name: "GPS", status: "ok" as const },
@@ -70,29 +70,28 @@ export default function Vehicle() {
           <SensorGrid sensors={sensors} columns={3} />
         </div>
 
-        {/* Temperature */}
-        <MetricCard title="Engine Temp" icon={<Thermometer className="w-4 h-4" />} value="" className="flex flex-col items-center justify-center">
+        {/* Vehicle Heading */}
+        <MetricCard title="Vehicle Heading" value="" className="flex flex-col items-center justify-center">
           <CircularGauge
-            value={78}
-            max={120}
-            label="Temperature"
-            unit="°C"
-            variant={78 > 90 ? "danger" : 78 > 75 ? "warning" : "success"}
+            value={127}
+            max={360}
+            label="Heading"
+            unit="°"
+            variant="primary"
             size="md"
           />
         </MetricCard>
 
-        {/* Oil Pressure */}
-        <MetricCard title="Hydraulic Pressure" value="" className="flex flex-col items-center justify-center">
-          <CircularGauge
-            value={42}
-            max={60}
-            label="Hydraulics"
-            unit="PSI"
-            variant="success"
-            size="md"
-          />
-        </MetricCard>
+        {/* Manual Control */}
+        <div className="dashboard-panel flex flex-col items-center justify-center">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
+            Control Mode
+          </span>
+          <button className={cn("control-btn control-btn-start py-4 px-6 rounded-xl text-sm w-full")}>
+            <Power className="w-5 h-5 mx-auto mb-1" />
+            Switch to Manual
+          </button>
+        </div>
 
         {/* Voltage readings */}
         <div className="dashboard-panel col-span-2 lg:col-span-4">
@@ -119,23 +118,12 @@ export default function Vehicle() {
           </div>
         </div>
 
-        {/* Control Buttons */}
+        {/* Emergency Stop Only */}
         <div className="dashboard-panel col-span-2 lg:col-span-4">
-          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-4 block">
-            Vehicle Controls
-          </span>
-          <div className="grid grid-cols-3 gap-3">
-            <button className={cn("control-btn control-btn-start py-4 rounded-xl text-sm")}>
-              <Power className="w-5 h-5 mx-auto mb-1" />
-              Start
-            </button>
-            <button className={cn("control-btn control-btn-stop py-4 rounded-xl text-sm")}>
-              <Power className="w-5 h-5 mx-auto mb-1" />
-              Stop
-            </button>
-            <button className={cn("control-btn control-btn-emergency py-4 rounded-xl text-sm")}>
+          <div className="flex justify-center">
+            <button className={cn("control-btn control-btn-emergency py-4 px-8 rounded-xl text-sm")}>
               <span className="text-lg font-bold">⚠</span>
-              <span className="block text-[10px] mt-1">EMERGENCY</span>
+              <span className="block text-[10px] mt-1">EMERGENCY STOP</span>
             </button>
           </div>
         </div>

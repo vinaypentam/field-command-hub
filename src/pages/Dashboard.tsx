@@ -32,24 +32,32 @@ export default function Dashboard() {
       {/* Main Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 auto-rows-min">
         {/* Vehicle Status - Large */}
-        <div className="dashboard-panel col-span-2 lg:col-span-1">
+        <div className="dashboard-panel col-span-2 lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
               Vehicle Status
             </span>
             <Activity className="w-4 h-4 text-success" />
           </div>
-          <div className="flex flex-col items-center">
-            <StatusIndicator status="success" label="Harvester-01" size="lg" />
-            <div className="mt-4 flex gap-6">
-              <div className="text-center">
-                <span className="text-2xl font-mono font-bold text-foreground">4.2</span>
-                <span className="text-xs text-muted-foreground block">Hours Today</span>
-              </div>
-              <div className="text-center">
-                <span className="text-2xl font-mono font-bold text-success">ACTIVE</span>
-                <span className="text-xs text-muted-foreground block">Mode</span>
-              </div>
+          <div className="flex items-center gap-4 mb-3">
+            <StatusIndicator status="success" label="Harvester-01" size="md" />
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            <div className="text-center p-2 bg-gauge-bg rounded-lg">
+              <span className="text-xl font-mono font-bold text-foreground">8.5</span>
+              <span className="text-[10px] text-muted-foreground block mt-0.5">km/h</span>
+            </div>
+            <div className="text-center p-2 bg-gauge-bg rounded-lg">
+              <span className="text-xl font-mono font-bold text-success">72%</span>
+              <span className="text-[10px] text-muted-foreground block mt-0.5">Battery</span>
+            </div>
+            <div className="text-center p-2 bg-gauge-bg rounded-lg">
+              <span className="text-xl font-mono font-bold text-primary">RTK</span>
+              <span className="text-[10px] text-muted-foreground block mt-0.5">GPS Type</span>
+            </div>
+            <div className="text-center p-2 bg-gauge-bg rounded-lg">
+              <span className="text-xl font-mono font-bold text-foreground">18</span>
+              <span className="text-[10px] text-muted-foreground block mt-0.5">Satellites</span>
             </div>
           </div>
         </div>

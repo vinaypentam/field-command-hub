@@ -18,10 +18,16 @@ const sensors = [
 export default function Vehicle() {
   return (
     <div className="min-h-screen bg-background pb-20 pt-16 p-4">
-      {/* Title */}
-      <header className="mb-4">
-        <h1 className="text-xl font-semibold text-foreground">Vehicle Control</h1>
-        <p className="text-xs text-muted-foreground">Harvester-01 • Model AX-500</p>
+      {/* Header with Emergency Stop */}
+      <header className="flex items-center justify-between mb-4">
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">Vehicle Control</h1>
+          <p className="text-xs text-muted-foreground">Harvester-01 • Model AX-500</p>
+        </div>
+        <button className={cn("control-btn control-btn-emergency py-3 px-4 rounded-xl text-sm")}>
+          <span className="text-lg font-bold">⚠</span>
+          <span className="block text-[10px] mt-0.5">E-STOP</span>
+        </button>
       </header>
 
       {/* Main instrument cluster grid */}
@@ -93,40 +99,6 @@ export default function Vehicle() {
           </button>
         </div>
 
-        {/* Voltage readings */}
-        <div className="dashboard-panel col-span-2 lg:col-span-4">
-          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3 block">
-            Power Distribution
-          </span>
-          <div className="grid grid-cols-4 gap-3">
-            <div className="text-center p-3 bg-gauge-bg rounded-lg">
-              <span className="text-2xl font-mono font-bold text-foreground">48.2</span>
-              <span className="text-xs text-muted-foreground block mt-1">Main (V)</span>
-            </div>
-            <div className="text-center p-3 bg-gauge-bg rounded-lg">
-              <span className="text-2xl font-mono font-bold text-foreground">12.1</span>
-              <span className="text-xs text-muted-foreground block mt-1">Aux (V)</span>
-            </div>
-            <div className="text-center p-3 bg-gauge-bg rounded-lg">
-              <span className="text-2xl font-mono font-bold text-success">24.5</span>
-              <span className="text-xs text-muted-foreground block mt-1">Current (A)</span>
-            </div>
-            <div className="text-center p-3 bg-gauge-bg rounded-lg">
-              <span className="text-2xl font-mono font-bold text-foreground">1.18</span>
-              <span className="text-xs text-muted-foreground block mt-1">Power (kW)</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Emergency Stop Only */}
-        <div className="dashboard-panel col-span-2 lg:col-span-4">
-          <div className="flex justify-center">
-            <button className={cn("control-btn control-btn-emergency py-4 px-8 rounded-xl text-sm")}>
-              <span className="text-lg font-bold">⚠</span>
-              <span className="block text-[10px] mt-1">EMERGENCY STOP</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

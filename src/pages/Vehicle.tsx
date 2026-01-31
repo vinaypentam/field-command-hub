@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { SemiCircleGauge } from "@/components/dashboard/SemiCircleGauge";
 import { CircularGauge } from "@/components/dashboard/CircularGauge";
 import { BatteryGauge } from "@/components/dashboard/BatteryGauge";
 import { SensorGrid } from "@/components/dashboard/SensorGrid";
 import { MetricCard } from "@/components/dashboard/MetricCard";
+import { WheelStatusModal } from "@/components/dashboard/WheelStatusModal";
 import { cn } from "@/lib/utils";
-import { Gauge, Power, Zap } from "lucide-react";
+import { Gauge, Power, Zap, CircleDot } from "lucide-react";
 
 const sensors = [
   { name: "GPS", status: "ok" as const },
@@ -16,8 +18,11 @@ const sensors = [
 ];
 
 export default function Vehicle() {
+  const [wheelModalOpen, setWheelModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background pb-20 pt-16 p-4">
+      <WheelStatusModal open={wheelModalOpen} onOpenChange={setWheelModalOpen} />
       {/* Header with Emergency Stop */}
       <header className="flex items-center justify-between mb-4">
         <div>
@@ -96,6 +101,20 @@ export default function Vehicle() {
           <button className={cn("control-btn control-btn-start py-4 px-6 rounded-xl text-sm w-full")}>
             <Power className="w-5 h-5 mx-auto mb-1" />
             Switch to Manual
+          </button>
+        </div>
+
+        {/* Wheel Status Button */}
+        <div className="dashboard-panel flex flex-col items-center justify-center">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
+            Wheel Dynamics
+          </span>
+          <button 
+            onClick={() => setWheelModalOpen(true)}
+            className={cn("control-btn control-btn-active py-4 px-6 rounded-xl text-sm w-full")}
+          >
+            <CircleDot className="w-5 h-5 mx-auto mb-1" />
+            View Wheel Status
           </button>
         </div>
 

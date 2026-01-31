@@ -1,12 +1,11 @@
-import { useState } from "react";
 import { SemiCircleGauge } from "@/components/dashboard/SemiCircleGauge";
 import { CircularGauge } from "@/components/dashboard/CircularGauge";
 import { BatteryGauge } from "@/components/dashboard/BatteryGauge";
 import { SensorGrid } from "@/components/dashboard/SensorGrid";
 import { MetricCard } from "@/components/dashboard/MetricCard";
-import { WheelStatusModal } from "@/components/dashboard/WheelStatusModal";
+import { WheelStatusInline } from "@/components/dashboard/WheelStatusInline";
 import { cn } from "@/lib/utils";
-import { Gauge, Power, Zap, CircleDot } from "lucide-react";
+import { Gauge, Power, Zap } from "lucide-react";
 
 const sensors = [
   { name: "GPS", status: "ok" as const },
@@ -18,11 +17,8 @@ const sensors = [
 ];
 
 export default function Vehicle() {
-  const [wheelModalOpen, setWheelModalOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-background pb-20 pt-16 p-4">
-      <WheelStatusModal open={wheelModalOpen} onOpenChange={setWheelModalOpen} />
       {/* Header with Emergency Stop */}
       <header className="flex items-center justify-between mb-4">
         <div>
@@ -35,13 +31,13 @@ export default function Vehicle() {
         </button>
       </header>
 
-      {/* Main instrument cluster grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {/* Large Speed Gauge - Center piece */}
-        <div className="dashboard-panel col-span-2 flex flex-col items-center justify-center py-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Gauge className="w-5 h-5 text-primary" />
-            <span className="text-sm uppercase tracking-wider text-muted-foreground font-medium">
+      {/* Top row: Speed, Battery, Heading, Control Mode */}
+      <div className="grid grid-cols-4 gap-3 mb-3">
+        {/* Speed Gauge */}
+        <div className="dashboard-panel flex flex-col items-center justify-center py-4">
+          <div className="flex items-center gap-1.5 mb-2">
+            <Gauge className="w-4 h-4 text-primary" />
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
               Speed
             </span>
           </div>
@@ -50,28 +46,43 @@ export default function Vehicle() {
             max={25}
             label="km/h"
             variant="primary"
-            size="lg"
+            size="md"
           />
         </div>
 
         {/* Battery */}
-        <MetricCard title="Battery System" icon={<Zap className="w-4 h-4" />} value="" className="flex flex-col items-center justify-center py-4">
-          <BatteryGauge level={72} voltage={48.2} charging={false} size="md" />
+        <MetricCard title="Battery" icon={<Zap className="w-4 h-4" />} value="" className="flex flex-col items-center justify-center py-4">
+          <BatteryGauge level={72} voltage={48.2} charging={false} size="sm" />
         </MetricCard>
 
-        {/* Motor RPM */}
-        <MetricCard title="Motor RPM" icon={<Power className="w-4 h-4" />} value="" className="flex flex-col items-center justify-center">
+        {/* Vehicle Heading */}
+        <MetricCard title="Heading" value="" className="flex flex-col items-center justify-center py-4">
           <CircularGauge
-            value={2400}
-            max={4000}
-            label="RPM"
+            value={127}
+            max={360}
+            label="Heading"
+            unit="°"
             variant="primary"
-            size="md"
+            size="sm"
           />
         </MetricCard>
 
-        {/* Sensor Health Grid */}
-        <div className="dashboard-panel col-span-2">
+        {/* Manual Control */}
+        <div className="dashboard-panel flex flex-col items-center justify-center py-4">
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">
+            Control Mode
+          </span>
+          <button className={cn("control-btn control-btn-start py-3 px-4 rounded-xl text-xs w-full")}>
+            <Power className="w-4 h-4 mx-auto mb-1" />
+            Manual
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom row: Sensor Health (left) + Wheel Status (right) */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Sensor Health Grid - 3x2 */}
+        <div className="dashboard-panel">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
               Sensor Health
@@ -81,43 +92,16 @@ export default function Vehicle() {
           <SensorGrid sensors={sensors} columns={3} />
         </div>
 
-        {/* Vehicle Heading */}
-        <MetricCard title="Vehicle Heading" value="" className="flex flex-col items-center justify-center">
-          <CircularGauge
-            value={127}
-            max={360}
-            label="Heading"
-            unit="°"
-            variant="primary"
-            size="md"
-          />
-        </MetricCard>
-
-        {/* Manual Control */}
-        <div className="dashboard-panel flex flex-col items-center justify-center">
-          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
-            Control Mode
-          </span>
-          <button className={cn("control-btn control-btn-start py-4 px-6 rounded-xl text-sm w-full")}>
-            <Power className="w-5 h-5 mx-auto mb-1" />
-            Switch to Manual
-          </button>
+        {/* Wheel Status Inline */}
+        <div className="dashboard-panel flex flex-col">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+              Wheel Dynamics
+            </span>
+            <span className="text-xs text-primary">4WS Active</span>
+          </div>
+          <WheelStatusInline />
         </div>
-
-        {/* Wheel Status Button */}
-        <div className="dashboard-panel flex flex-col items-center justify-center">
-          <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-3">
-            Wheel Dynamics
-          </span>
-          <button 
-            onClick={() => setWheelModalOpen(true)}
-            className={cn("control-btn control-btn-active py-4 px-6 rounded-xl text-sm w-full")}
-          >
-            <CircleDot className="w-5 h-5 mx-auto mb-1" />
-            View Wheel Status
-          </button>
-        </div>
-
       </div>
     </div>
   );

@@ -9,9 +9,9 @@ interface FloatingButtonsProps {
 export function FloatingButtons({ className }: FloatingButtonsProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  const isVehiclePage = location.pathname === "/" || location.pathname === "/vehicle";
 
-  if (isHome) return null;
+  if (isVehiclePage) return null;
 
   return (
     <div className={cn("fixed top-4 left-4 z-50 flex gap-2", className)}>

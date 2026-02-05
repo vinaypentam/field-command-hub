@@ -6,19 +6,27 @@ import { MetricCard } from "@/components/dashboard/MetricCard";
 import { WheelStatusInline } from "@/components/dashboard/WheelStatusInline";
 import { cn } from "@/lib/utils";
 import { Gauge, Power, Zap } from "lucide-react";
-
-const sensors = [
-  { name: "GPS", status: "ok" as const },
-  { name: "LiDAR", status: "ok" as const },
-  { name: "Camera", status: "ok" as const },
-  { name: "Ultrasonic", status: "warning" as const },
-  { name: "IMU", status: "ok" as const },
-  { name: "Wheel Enc", status: "ok" as const },
-];
-
+const sensors = [{
+  name: "GPS",
+  status: "ok" as const
+}, {
+  name: "LiDAR",
+  status: "ok" as const
+}, {
+  name: "Camera",
+  status: "ok" as const
+}, {
+  name: "Ultrasonic",
+  status: "warning" as const
+}, {
+  name: "IMU",
+  status: "ok" as const
+}, {
+  name: "Wheel Enc",
+  status: "ok" as const
+}];
 export default function Vehicle() {
-  return (
-    <div className="min-h-screen bg-background pb-20 pt-16 p-4">
+  return <div className="min-h-screen bg-background p-4 py-[20px] pt-[20px] pb-0">
       {/* Header with Emergency Stop */}
       <header className="flex items-center justify-between mb-4">
         <div>
@@ -41,13 +49,7 @@ export default function Vehicle() {
               Speed
             </span>
           </div>
-          <SemiCircleGauge
-            value={8.5}
-            max={25}
-            label="km/h"
-            variant="primary"
-            size="md"
-          />
+          <SemiCircleGauge value={8.5} max={25} label="km/h" variant="primary" size="md" />
         </div>
 
         {/* Battery */}
@@ -57,14 +59,7 @@ export default function Vehicle() {
 
         {/* Vehicle Heading */}
         <MetricCard title="Heading" value="" className="flex flex-col items-center justify-center py-4">
-          <CircularGauge
-            value={127}
-            max={360}
-            label="Heading"
-            unit="°"
-            variant="primary"
-            size="sm"
-          />
+          <CircularGauge value={127} max={360} label="Heading" unit="°" variant="primary" size="sm" />
         </MetricCard>
 
         {/* Manual Control */}
@@ -103,6 +98,5 @@ export default function Vehicle() {
           <WheelStatusInline />
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }

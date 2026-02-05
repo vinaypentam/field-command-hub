@@ -1,6 +1,7 @@
 import { MiniMap } from "@/components/dashboard/MiniMap";
 import { cn } from "@/lib/utils";
 import { Check, MapPin, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Field {
   id: string;
@@ -18,6 +19,7 @@ const fields: Field[] = [
 ];
 
 export default function Fields() {
+  const navigate = useNavigate();
   const statusColors = {
     idle: "border-border text-muted-foreground",
     active: "border-success/50 text-success",
@@ -114,6 +116,7 @@ export default function Fields() {
 
       {/* Floating Add Button */}
       <button
+        onClick={() => navigate("/fields/create")}
         className={cn(
           "fixed bottom-24 right-4 z-40",
           "w-14 h-14 rounded-full",

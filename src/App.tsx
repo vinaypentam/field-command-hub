@@ -10,6 +10,7 @@ import TaskList from "./pages/TaskList";
 import TaskCreate from "./pages/TaskCreate";
 import TaskDetail from "./pages/TaskDetail";
 import Fields from "./pages/Fields";
+import PlotCreate from "./pages/PlotCreate";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/task/edit/:id" element={<TaskCreate />} />
             <Route path="/task/:id" element={<TaskDetail />} />
             <Route path="/fields" element={<Fields />} />
+            <Route path="/fields/create" element={<PlotCreate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <BottomNav items={navItems} />

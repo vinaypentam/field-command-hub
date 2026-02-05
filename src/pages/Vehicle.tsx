@@ -5,7 +5,7 @@ import { SensorGrid } from "@/components/dashboard/SensorGrid";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { WheelStatusInline } from "@/components/dashboard/WheelStatusInline";
 import { cn } from "@/lib/utils";
-import { Gauge, Power, Zap } from "lucide-react";
+import { Bell, Gauge, Power, Zap } from "lucide-react";
 
 const sensors = [
   { name: "GPS", status: "ok" as const },
@@ -22,13 +22,17 @@ export default function Vehicle() {
       {/* Header with Emergency Stop */}
       <header className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-xl font-semibold text-foreground">Vehicle Control</h1>
+          <h1 className="text-xl font-semibold text-foreground">AgriBot Control</h1>
           <p className="text-xs text-muted-foreground">Harvester-01 • Model AX-500</p>
         </div>
-        <button className={cn("control-btn control-btn-emergency py-3 px-4 rounded-xl text-sm")}>
-          <span className="text-lg font-bold">⚠</span>
-          <span className="block text-[10px] mt-0.5">E-STOP</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+            <Bell className="w-5 h-5" />
+          </button>
+          <button className={cn("control-btn control-btn-emergency py-2 px-3 rounded-lg text-xs")}>
+            Emergency Stop
+          </button>
+        </div>
       </header>
 
       {/* Top row: Speed, Battery, Heading, Control Mode */}

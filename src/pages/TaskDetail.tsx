@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Bell, Maximize2, Truck, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Maximize2, Truck, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { AppHeader } from "@/components/dashboard/AppHeader";
 
 // Mock task data
 const tasksData: Record<string, { name: string; plot: string; progress: number; status: string }> = {
@@ -70,9 +71,9 @@ export default function TaskDetail() {
 
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
-      {/* Header */}
-      <header className="flex items-center justify-between p-4 shrink-0">
-        <div className="flex items-center gap-4">
+      <AppHeader
+        title={task.name}
+        leftContent={
           <button
             onClick={() => navigate("/task")}
             className={cn(
@@ -84,17 +85,8 @@ export default function TaskDetail() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-semibold text-foreground">{task.name}</h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
-            <Bell className="w-5 h-5" />
-          </button>
-          <button className={cn("control-btn control-btn-emergency py-2 px-3 rounded-lg text-xs")}>
-            Emergency Stop
-          </button>
-        </div>
-      </header>
+        }
+      />
 
       {/* Main Content - Two columns */}
       <div className="flex-1 grid grid-cols-2 gap-4 p-4 pt-0 pb-20 min-h-0">

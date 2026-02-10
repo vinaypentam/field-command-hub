@@ -4,30 +4,31 @@ import { WheelStatusInline } from "@/components/dashboard/WheelStatusInline";
 import { VehicleStatusPanel } from "@/components/dashboard/VehicleStatusPanel";
 import { BatteryStatusPanel } from "@/components/dashboard/BatteryStatusPanel";
 import { LinearActuatorPanel } from "@/components/dashboard/LinearActuatorPanel";
+import { AppHeader } from "@/components/dashboard/AppHeader";
 import { cn } from "@/lib/utils";
-import { Bell, Gauge } from "lucide-react";
+import { Gauge } from "lucide-react";
 
 export default function Vehicle() {
   return (
-    <div className="min-h-screen bg-background pb-20 pt-16 p-4">
-      {/* Header */}
-      <header className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">AgriBot Control</h1>
-          <p className="text-xs text-muted-foreground">Harvester-01 • Model AX-500</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
-            <Bell className="w-5 h-5" />
-          </button>
-          <button className={cn("control-btn control-btn-emergency py-2 px-3 rounded-lg text-xs")}>
-            Emergency Stop
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background pb-20">
+      <AppHeader
+        title="AgriBot Control"
+        subtitle="Harvester-01 • Model AX-500"
+        extraButtons={
+          <>
+            <button className={cn("control-btn py-2 px-3 rounded-lg text-xs bg-warning/20 text-warning hover:bg-warning/30 border border-warning/30")}>
+              Park
+            </button>
+            <button className={cn("control-btn py-2 px-3 rounded-lg text-xs bg-primary/20 text-primary hover:bg-primary/30 border border-primary/30")}>
+              RTL
+            </button>
+          </>
+        }
+      />
 
+      <div className="p-4 space-y-3">
       {/* Top row: Speed, Heading, Vehicle Status */}
-      <div className="grid grid-cols-3 gap-3 mb-3">
+      <div className="grid grid-cols-3 gap-3">
         <div className="dashboard-panel flex flex-col items-center justify-center py-4">
           <div className="flex items-center gap-1.5 mb-2">
             <Gauge className="w-4 h-4 text-primary" />
@@ -55,6 +56,7 @@ export default function Vehicle() {
           </div>
           <WheelStatusInline />
         </div>
+      </div>
       </div>
     </div>
   );

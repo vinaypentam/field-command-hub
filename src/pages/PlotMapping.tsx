@@ -61,30 +61,30 @@ export default function PlotMapping() {
         {/* Left Column - 25% */}
         <div className="col-span-1 border-r border-border flex flex-col overflow-hidden">
           {/* Pre-Checks */}
-          <div className="p-3 border-b border-border space-y-3">
-            <h2 className="text-sm font-semibold text-foreground">Pre-Checks</h2>
-            <div className="space-y-2">
+          <div className="dashboard-panel flex flex-col py-3 px-4 border-b border-border">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">
+              Pre-Checks
+            </span>
+            <div className="flex flex-col gap-2 text-sm">
               {[
-                { label: "Ready to Arm", ok: true },
-                { label: "GPS: RTK", ok: true },
-                { label: "GNSS: 34", ok: true },
-                { label: "RC Connection", ok: true },
+                { label: "Ready to Arm", value: "OK", ok: true },
+                { label: "GPS", value: "RTK", ok: true },
+                { label: "GNSS", value: "34", ok: true },
+                { label: "RC Connection", value: "OK", ok: true },
               ].map((item) => (
-                <div key={item.label} className="flex items-center gap-2 text-xs">
-                  <span
-                    className={cn(
-                      "w-2 h-2 rounded-full shrink-0",
-                      item.ok ? "bg-green-500" : "bg-destructive"
-                    )}
-                  />
+                <div key={item.label} className="flex items-center justify-between">
                   <span className="text-muted-foreground">{item.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    <div className={cn("w-2 h-2 rounded-full", item.ok ? "bg-success" : "bg-danger")} />
+                    <span className="text-foreground font-medium font-mono">{item.value}</span>
+                  </div>
                 </div>
               ))}
             </div>
             <Button
               size="sm"
               variant={isArmed ? "destructive" : "default"}
-              className="w-full"
+              className="w-full mt-3"
               onClick={() => setIsArmed(!isArmed)}
             >
               {isArmed ? "Disarm" : "Arm"}

@@ -83,7 +83,7 @@ export default function PlotCreate() {
 
         {/* Create File Button */}
         <div className="flex justify-center">
-          <Button variant="outline" className="px-8">
+          <Button variant="outline" className="px-8" onClick={() => navigate("/fields/plot-map")}>
             Create File
           </Button>
         </div>

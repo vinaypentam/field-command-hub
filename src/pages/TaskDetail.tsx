@@ -127,17 +127,17 @@ export default function TaskDetail() {
                 Start
               </Button>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
                 <Button
                   variant="secondary"
-                  className="w-full"
+                  className="flex-1"
                   onClick={() => setIsPaused(!isPaused)}
                 >
                   {isPaused ? "Resume" : "Pause"}
                 </Button>
                 <Button
                   variant="destructive"
-                  className="w-full"
+                  className="flex-1"
                   onClick={() => {
                     setIsStarted(false);
                     setIsPaused(false);

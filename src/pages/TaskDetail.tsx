@@ -1,10 +1,17 @@
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Maximize2, Truck, X } from "lucide-react";
+import { ArrowLeft, Camera, MapPin } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { AppHeader } from "@/components/dashboard/AppHeader";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Mock task data
 const tasksData: Record<string, { name: string; plot: string; progress: number; status: string }> = {
@@ -25,7 +32,10 @@ export default function TaskDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
   const task = id ? tasksData[id] : null;
-  const [mapMaximized, setMapMaximized] = useState(false);
+  const [isArmed, setIsArmed] = useState(false);
+  const [vehicleMode, setVehicleMode] = useState("auto");
+  const [isStarted, setIsStarted] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   if (!task) {
     return (
@@ -34,40 +44,6 @@ export default function TaskDetail() {
       </div>
     );
   }
-
-  const MapContent = ({ isMaximized = false }: { isMaximized?: boolean }) => (
-    <div className={cn(
-      "flex items-center justify-center relative",
-      isMaximized ? "h-full" : "h-full"
-    )}>
-      <div className="text-center">
-        <div className={cn(
-          "mx-auto mb-3 rounded-xl bg-muted/50 flex items-center justify-center",
-          isMaximized ? "w-24 h-24" : "w-16 h-16"
-        )}>
-          <svg
-            className={cn("text-muted-foreground", isMaximized ? "w-12 h-12" : "w-8 h-8")}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-            />
-          </svg>
-        </div>
-        <span className={cn("font-semibold text-muted-foreground", isMaximized ? "text-3xl" : "text-xl")}>
-          Map View
-        </span>
-        <p className={cn("text-muted-foreground/60 mt-1", isMaximized ? "text-sm" : "text-xs")}>
-          {task.plot}
-        </p>
-      </div>
-    </div>
-  );
 
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
@@ -88,44 +64,128 @@ export default function TaskDetail() {
         }
       />
 
-      {/* Main Content - Two columns */}
-      <div className="flex-1 grid grid-cols-2 gap-4 p-4 pt-0 pb-20 min-h-0">
-        {/* Left Column - Progress, Vehicle, Logs */}
-        <div className="flex flex-col gap-3 min-h-0">
-          {/* Progress Section */}
-          <div className="dashboard-panel shrink-0">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-                Progress
-              </span>
-              <span className="text-sm font-mono text-primary">{task.progress}%</span>
+      {/* Three-column grid */}
+      <div className="flex-1 grid grid-cols-4 gap-0 overflow-hidden">
+        {/* Left Column - 25% */}
+        <div className="col-span-1 border-r border-border flex flex-col overflow-hidden">
+          {/* Pre-Checks */}
+          <div className="dashboard-panel flex flex-col py-3 px-4 border-b border-border">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-2">
+              Pre-Checks
+            </span>
+            <div className="flex flex-col gap-2 text-sm">
+              {[
+                { label: "Ready to Arm", value: "Yes", ok: true },
+                { label: "GPS", value: "RTK", ok: true },
+                { label: "GNSS", value: "34", ok: true },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center justify-between">
+                  <span className="text-muted-foreground">{item.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    <div className={cn("w-2 h-2 rounded-full", item.ok ? "bg-success" : "bg-danger")} />
+                    <span className="text-foreground font-medium font-mono">{item.value}</span>
+                  </div>
+                </div>
+              ))}
+              {/* Vehicle Mode Dropdown */}
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Vehicle Mode</span>
+                <Select value={vehicleMode} onValueChange={setVehicleMode}>
+                  <SelectTrigger className="w-24 h-7 text-xs font-mono">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="auto">AUTO</SelectItem>
+                    <SelectItem value="manual">MANUAL</SelectItem>
+                    <SelectItem value="rc">RC</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <Progress value={task.progress} className="h-2" />
+            <Button
+              size="sm"
+              variant={isArmed ? "destructive" : "default"}
+              className="w-full mt-3"
+              onClick={() => setIsArmed(!isArmed)}
+            >
+              {isArmed ? "Disarm" : "Arm"}
+            </Button>
           </div>
 
-          {/* Vehicle Card */}
-          <div
-            onClick={() => navigate("/vehicle")}
-            className={cn(
-              "dashboard-panel flex items-center justify-between cursor-pointer shrink-0",
-              "hover:border-primary/30 transition-colors"
-            )}
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-                <Truck className="w-6 h-6 text-primary" />
+          {/* Camera Section */}
+          <div className="h-[40vh] bg-muted/50 flex items-center justify-center border-b border-border shrink-0">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <Camera className="w-8 h-8" />
+              <span className="text-xs">Camera Feed</span>
+            </div>
+          </div>
+
+          {/* Controls below camera */}
+          <div className="p-3 space-y-2">
+            {!isStarted ? (
+              <Button className="w-full" onClick={() => setIsStarted(true)}>
+                Start
+              </Button>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => setIsPaused(!isPaused)}
+                >
+                  {isPaused ? "Resume" : "Pause"}
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => {
+                    setIsStarted(false);
+                    setIsPaused(false);
+                  }}
+                >
+                  Stop
+                </Button>
               </div>
-              <div>
-                <h3 className="text-sm font-medium text-foreground">Harvester-01</h3>
-                <p className="text-xs text-muted-foreground">Model AX-500</p>
+            )}
+          </div>
+        </div>
+
+        {/* Center Column - 50% (Map) */}
+        <div className="col-span-2 flex items-center justify-center bg-muted/30">
+          <div className="flex flex-col items-center gap-2 text-muted-foreground">
+            <MapPin className="w-10 h-10" />
+            <span className="text-sm">Map View</span>
+            <p className="text-xs text-muted-foreground/60">{task.plot}</p>
+          </div>
+        </div>
+
+        {/* Right Column - 25% */}
+        <div className="col-span-1 border-l border-border flex flex-col overflow-hidden">
+          {/* Progress Section */}
+          <div className="dashboard-panel flex flex-col py-3 px-4 border-b border-border shrink-0">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-3">
+              Progress
+            </span>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-muted-foreground">Completion</span>
+              <span className="text-sm font-mono text-primary">{task.progress}%</span>
+            </div>
+            <Progress value={task.progress} className="h-2 mb-3" />
+            <div className="flex flex-col gap-2 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Plot</span>
+                <span className="text-foreground font-medium font-mono">{task.plot}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Time</span>
+                <span className="text-foreground font-medium font-mono">1:30:25</span>
               </div>
             </div>
-            <ArrowRight className="w-5 h-5 text-muted-foreground" />
           </div>
 
           {/* Log Section */}
-          <div className="dashboard-panel flex-1 flex flex-col min-h-0">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium block mb-3 shrink-0">
+          <div className="dashboard-panel flex-1 flex flex-col min-h-0 py-3 px-4">
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium block mb-3 shrink-0">
               Log
             </span>
             <div className="flex-1 overflow-y-auto space-y-2 scrollbar-hide">
@@ -142,50 +202,7 @@ export default function TaskDetail() {
             </div>
           </div>
         </div>
-
-        {/* Right Column - Map View */}
-        <div className="dashboard-panel flex flex-col relative min-h-0">
-          <MapContent />
-          {/* Maximize Button */}
-          <button
-            onClick={() => setMapMaximized(true)}
-            className={cn(
-              "absolute bottom-3 right-3",
-              "w-10 h-10 rounded-lg",
-              "bg-muted/80 hover:bg-muted border border-border",
-              "flex items-center justify-center",
-              "text-muted-foreground hover:text-foreground",
-              "transition-all duration-200 active:scale-95"
-            )}
-            aria-label="Maximize map"
-          >
-            <Maximize2 className="w-5 h-5" />
-          </button>
-        </div>
       </div>
-
-      {/* Maximized Map Modal */}
-      <Dialog open={mapMaximized} onOpenChange={setMapMaximized}>
-        <DialogContent className="max-w-[95vw] w-[95vw] h-[90vh] p-0">
-          <div className="relative w-full h-full bg-card rounded-lg">
-            <MapContent isMaximized />
-            <button
-              onClick={() => setMapMaximized(false)}
-              className={cn(
-                "absolute top-4 right-4",
-                "w-10 h-10 rounded-lg",
-                "bg-muted/80 hover:bg-muted border border-border",
-                "flex items-center justify-center",
-                "text-muted-foreground hover:text-foreground",
-                "transition-all duration-200 active:scale-95"
-              )}
-              aria-label="Close maximized map"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
